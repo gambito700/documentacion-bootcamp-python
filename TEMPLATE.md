@@ -1,12 +1,25 @@
 # TÍTULO DEL TEMA
 
-## 📘 Definición
-
-Explicación clara y sencilla del concepto.
+> Autor:  
+> Fecha:  
+> Issue relacionada: #  
 
 ---
 
-## 🧠 Sintaxis
+## 📘 Definición
+
+Explicación clara, breve y precisa del concepto.  
+Debe poder entenderla alguien que recién comienza.
+
+---
+
+## 🧠 ¿Para qué sirve?
+
+Explicar en qué casos se usa y por qué es importante.
+
+---
+
+## 🧩 Sintaxis
 
 ```python
-# ejemplo simple
+# ejemplo básico de sintaxis
