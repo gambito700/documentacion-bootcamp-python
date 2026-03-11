@@ -5,9 +5,15 @@
 #----------------------------------------------FOR----------------------------------------------#
 #-----------------------------------------------------------------------------------------------#
 
-#"for" itera sobre una secuencia de elementos uno por uno
-# en cada vuelta toma un elemento, lo guarda en la variable y ejecuta
+# "for" itera sobre una secuencia de elementos uno por uno
+# en cada vuelta toma un elemento, lo guarda en la variable y ejecuta 
+# el "for" tiene 4 formas comunes:
+#  Numérica          for n in range(x)
+#  Lista             for tree in carpetas
+#  Con índice        for i, tree in enumerate(carpetas)
+#  Dos listas        for a, b in zip(lista1, lista2)
 
+# FOR con RANGO numerico
 # for n in range(4)
 # "for"     inicia el loop
 # "n"           es la variable que recibe cada valor de la secuencia
@@ -33,16 +39,17 @@ for n in range(4):
 # print(n, end="")    todo junto
 # print(n, end="\n")  comportamiento por defecto
 
-# creo la variable "carpetas" con una lista de nombres de carpetas del repositorio
+# FOR con LISTA "carpetas" de nombres de carpetas del repositorio
 carpetas = ["C:\\", "control-de-flujo", "estructuras-de-datos", "funciones", "Fundamentos", "modulos", "poo"]
 
 # "for tree in carpetas" recorre cada elemento de la lista
 # la variable receptora la he llamado "tree" porque representa un arbol de carpetas
 # pero podria llamarse de cualquier forma
+
 for tree in carpetas:
     print(tree)
 
-# diferencia entre imprimir la lista completa vs imprimir elemento por elemento:
+# diferencia entre imprimir la lista completa vs imprimir elemento
 # print(carpetas)   muestra la lista con corchetes y comas
 # print(tree)       muestra cada elemento en una línea separada
 
@@ -53,6 +60,23 @@ for tree in carpetas:
 
 # for tree in carpetas:
 #      print(tree)
+
+
+# "for i, tree in enumerate(carpetas)" recorre la lista con su posición numérica
+# "i"           es el índice o posición del elemento podria ser cualquier cosa
+# "tree"        es el valor del elemento el que ya definimos antes
+# "enumerate"   genera pares (índice, valor) automáticamente
+
+for tree in enumerate(carpetas):
+    print(tree)
+
+# Flujo completo
+# vuelta 1 → i = 0, tree = "C:\\"                   → imprime 0 C:\
+# vuelta 2 → i = 1, tree = "control-de-flujo"       → imprime 1 control-de-flujo
+# vuelta 3 → i = 2, tree = "estructuras-de-datos"   → imprime 2 estructuras-de-datos
+# no hay mas elementos → se detiene
+
+
 
 #-------------------------------------------------------------------------------------------------#
 #----------------------------------------------WHILE----------------------------------------------#
