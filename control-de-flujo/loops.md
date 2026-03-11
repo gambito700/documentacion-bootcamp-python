@@ -2,7 +2,7 @@
 
 > Autor: Alex Martinez (gambito700)
 > Fecha: 11 de marzo de 2026
-> Issue relacionada: #
+> Issue relacionada: #10
 
 ---
 
