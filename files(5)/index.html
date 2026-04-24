@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!--
+    IMPORTANTE: Este script debe ser el PRIMERO en el <head>.
+    Lee el tema guardado en localStorage y lo aplica ANTES de
+    que el browser renderice cualquier CSS, evitando el "flash"
+    de tema incorrecto al cargar o navegar entre páginas.
+  -->
+  <script>
+    (function() {
+      var t = localStorage.getItem("tienda_tema");
+      if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+    })();
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tienda Demo — Productos</title>
+
+  <!-- Bootstrap 5 — solo para el grid y el navbar collapse en mobile -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+    crossorigin="anonymous"
+  />
+
+  <!-- Estilos propios — SIEMPRE después de Bootstrap para poder sobreescribir -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVBAR
+       Para agregar ítems al menú: copia una <li> y ajusta href y texto.
+       El #contador se actualiza automáticamente desde JS (UI.updateCounter).
+       ============================================================ -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+
+      <!-- Logo -->
+      <a class="navbar-brand" href="index.html">Tienda<span>Demo</span></a>
+
+      <!-- Hamburguesa para mobile -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarMenu"
+        aria-controls="navbarMenu"
+        aria-expanded="false"
+        aria-label="Abrir menú"
+      >
+        <span style="color:var(--text-main);font-size:1.1rem;">☰</span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMenu">
+
+        <!-- Links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="cart.html">
+              Carrito <span id="contador">0</span>
+            </a>
+          </li>
+        </ul>
+
+        <!-- Buscador + Toggle de tema -->
+        <div class="d-flex align-items-center gap-2 flex-wrap mt-2 mt-lg-0">
+
+          <div class="search-wrapper">
+            <input
+              type="search"
+              class="search-input"
+              id="inputBusqueda"
+              placeholder="Buscar productos..."
+              autocomplete="off"
+            />
+            <button class="btn-search" type="button" onclick="UI.filtrarProductos()">Buscar</button>
+          </div>
+
+          <!--
+            Botón toggle de tema.
+            El texto e ícono se actualizan desde Theme.apply() en script.js.
+          -->
+          <button id="themeToggle" class="theme-toggle">☀️ Claro</button>
+
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       CONTENIDO PRINCIPAL
+       ============================================================ -->
+  <main class="container">
+
+    <div class="page-header">
+      <h1>Productos Disponibles</h1>
+      <p>Explora nuestra colección o usa el buscador para encontrar lo que necesitas</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!--
+      GRID DE PRODUCTOS
+      Para agregar un producto:
+        1. Copia un bloque .col-12.col-md-4.producto
+        2. Cambia data-producto, src, alt, .card-title y .card-price
+        3. La imagen debe estar en la carpeta /images
+    -->
+    <div id="productosContainer" class="row g-4">
+
+      <div class="col-12 col-md-4 producto" data-producto="Pantalones Cuero">
+        <div class="card">
+          <img src="images/pantalon.png" class="card-img-top" alt="Pantalones de Cuero" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Pantalones de Cuero</h5>
+            <p class="card-price">$89.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Camiseta Premium">
+        <div class="card">
+          <img src="images/polera.png" class="card-img-top" alt="Camiseta Premium" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Camiseta Premium</h5>
+            <p class="card-price">$32.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Chaqueta Cuero">
+        <div class="card">
+          <img src="images/chaqueta.png" class="card-img-top" alt="Chaqueta de Cuero" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Chaqueta de Cuero</h5>
+            <p class="card-price">$150.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Bufanda Tejida">
+        <div class="card">
+          <img src="images/bufanda.png" class="card-img-top" alt="Bufanda Tejida" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Bufanda Tejida</h5>
+            <p class="card-price">$28.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Gafas Sol">
+        <div class="card">
+          <img src="images/lentes.png" class="card-img-top" alt="Gafas de Sol" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Gafas de Sol</h5>
+            <p class="card-price">$45.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Gorro Bucket">
+        <div class="card">
+          <img src="images/sombrero.png" class="card-img-top" alt="Gorro Bucket" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Gorro Bucket</h5>
+            <p class="card-price">$35.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Zapatos Deportivos">
+        <div class="card">
+          <img src="images/zapatillas.png" class="card-img-top" alt="Zapatos Deportivos" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Zapatos Deportivos</h5>
+            <p class="card-price">$72.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Zapatos Formales">
+        <div class="card">
+          <img src="images/zapatos.png" class="card-img-top" alt="Zapatos Formales" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Zapatos Formales</h5>
+            <p class="card-price">$68.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4 producto" data-producto="Bolso Premium">
+        <div class="card">
+          <img src="images/cartera.png" class="card-img-top" alt="Bolso Premium" loading="lazy" />
+          <div class="card-body">
+            <h5 class="card-title">Bolso Premium</h5>
+            <p class="card-price">$95.000</p>
+            <button class="btn-agregar agregar" type="button">Agregar al carrito</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /productosContainer -->
+  </main>
+
+
+  <footer>
+    <p>&copy; 2026 Tienda Demo. Todos los derechos reservados.</p>
+  </footer>
+
+
+  <!-- Bootstrap JS (requerido para el menú hamburguesa en mobile) -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-CDOy6cOE+C24W/C4/t8w+/EsbDL4xwLn62Y3P/K1M+8e+F0H7Pj/Av+sPaTRZg0yW"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- Script propio — SIEMPRE al final del body -->
+  <script src="script.js"></script>
+
+</body>
+</html>

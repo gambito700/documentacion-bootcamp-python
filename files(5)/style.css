@@ -1,0 +1,813 @@
+/* ================================================================
+   style.css — Tienda Demo
+   ================================================================
+
+   ┌─────────────────────────────────────────────────────────────┐
+   │  CAMBIA AQUÍ LOS COLORES PRINCIPALES DEL SITIO             │
+   │  Modifica estas variables y el cambio se aplica en TODO.   │
+   └─────────────────────────────────────────────────────────────┘
+*/
+
+/* ----------------------------------------------------------------
+   TEMA OSCURO (por defecto)
+   Para cambiar la paleta oscura, edita solo estos valores.
+---------------------------------------------------------------- */
+:root {
+  --bg-main:        #0d0f1a;   /* Fondo principal de la página     */
+  --bg-secondary:   #151929;   /* Fondo de navbar, footer, inputs  */
+  --bg-card:        #1c2035;   /* Fondo de tarjetas de producto    */
+
+  --text-main:      #e8eaf6;   /* Texto principal                  */
+  --text-secondary: #9fa8c4;   /* Texto secundario                 */
+  --text-muted:     #5c6580;   /* Texto tenue / placeholders       */
+
+  --accent:         #4f7cff;   /* Color de acento (precios, links) */
+  --accent-hover:   #3a66e8;
+  --accent-glow:    rgba(79, 124, 255, 0.2);
+
+  --success:        #3ecf8e;   /* Botón "Agregar al carrito"       */
+  --success-hover:  #2db97d;
+  --danger:         #ff4d6d;   /* Eliminar / badge carrito         */
+  --danger-hover:   #e0364f;
+
+  --border:         rgba(255, 255, 255, 0.08);
+  --shadow:         0 4px 24px rgba(0, 0, 0, 0.45);
+  --shadow-hover:   0 8px 32px rgba(79, 124, 255, 0.25);
+
+  --radius:         12px;
+  --radius-sm:      8px;
+  --radius-pill:    50px;
+  --transition:     0.22s ease;
+}
+
+/* ----------------------------------------------------------------
+   TEMA CLARO
+   Se activa automáticamente cuando <html> tiene data-theme="light"
+   Para cambiar la paleta clara, edita solo estos valores.
+---------------------------------------------------------------- */
+[data-theme="light"] {
+  --bg-main:        #f0f2fa;
+  --bg-secondary:   #ffffff;
+  --bg-card:        #ffffff;
+
+  --text-main:      #111827;
+  --text-secondary: #4b5563;
+  --text-muted:     #9ca3af;
+
+  --accent:         #2563eb;
+  --accent-hover:   #1d4ed8;
+  --accent-glow:    rgba(37, 99, 235, 0.15);
+
+  --success:        #059669;
+  --success-hover:  #047857;
+  --danger:         #dc2626;
+  --danger-hover:   #b91c1c;
+
+  --border:         rgba(0, 0, 0, 0.09);
+  --shadow:         0 2px 16px rgba(0, 0, 0, 0.08);
+  --shadow-hover:   0 8px 28px rgba(37, 99, 235, 0.18);
+}
+
+/* ================================================================
+   RESET Y BASE
+================================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.35s ease, color 0.35s ease;
+  position: relative;
+}
+
+main {
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* ================================================================
+   FONDO ANIMADO (gradiente en movimiento)
+   - position: fixed   → no se mueve al hacer scroll
+   - z-index: -1       → queda detrás de todo el contenido
+   - pointer-events: none → no interfiere con clicks
+   Para desactivarlo: pon opacity: 0
+================================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      125deg,
+      #0d0f1a 0%,
+      #0e1535 20%,
+      #0a1628 40%,
+      #111a30 60%,
+      #0d1f3c 80%,
+      #0d0f1a 100%
+    );
+  background-size: 400% 400%;
+  animation: bgShift 14s ease infinite;
+  opacity: 0.9;
+}
+
+[data-theme="light"] body::before {
+  background:
+    linear-gradient(
+      125deg,
+      #e8ecff 0%,
+      #dce8ff 30%,
+      #eef2ff 60%,
+      #d8e4ff 100%
+    );
+  background-size: 400% 400%;
+  opacity: 0.6;
+}
+
+@keyframes bgShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+/* ================================================================
+   NAVBAR
+================================================================ */
+.navbar {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 1.2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.navbar-brand {
+  color: var(--text-main) !important;
+  font-weight: 800;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+}
+
+.navbar-brand span { color: var(--accent); }
+
+.nav-link {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  font-size: 0.92rem;
+  padding: 0.35rem 0.72rem !important;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition), background-color var(--transition);
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--text-main) !important;
+  background-color: var(--border);
+}
+
+/* Badge numérico del carrito en el navbar */
+#contador {
+  background-color: var(--danger) !important;
+  font-size: 0.67rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  padding: 0.15em 0.48em;
+  vertical-align: middle;
+  display: inline-block;
+  transition: transform 0.15s ease;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Animación del badge cuando se agrega un producto */
+#contador.pulse {
+  animation: badgePulse 0.38s ease;
+}
+
+@keyframes badgePulse {
+  0%   { transform: scale(1);   }
+  50%  { transform: scale(1.6); }
+  100% { transform: scale(1);   }
+}
+
+.navbar-toggler {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.6rem;
+}
+
+.navbar-toggler:focus {
+  box-shadow: 0 0 0 2px var(--accent-glow);
+  outline: none;
+}
+
+/* ================================================================
+   BUSCADOR
+================================================================ */
+.search-wrapper {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+/* Importante: !important para sobreescribir Bootstrap */
+.search-input {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-pill) !important;
+  color: var(--text-main) !important;
+  font-size: 0.87rem;
+  padding: 0.4rem 1rem !important;
+  width: 210px;
+  transition: border-color var(--transition), box-shadow var(--transition),
+              background-color 0.35s ease, color 0.35s ease;
+}
+
+.search-input::placeholder { color: var(--text-muted) !important; }
+
+.search-input:focus {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-glow) !important;
+  background-color: var(--bg-secondary) !important;
+}
+
+.btn-search {
+  background-color: var(--accent);
+  border: none;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.42rem 1rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.btn-search:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   TOGGLE DARK / LIGHT MODE
+================================================================ */
+.theme-toggle {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 0.81rem;
+  font-weight: 600;
+  padding: 0.38rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+  transition: background-color var(--transition), border-color var(--transition),
+              color var(--transition), transform var(--transition);
+}
+
+.theme-toggle:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   ENCABEZADO DE SECCIÓN
+================================================================ */
+.page-header {
+  padding: 2.2rem 0 0.8rem;
+}
+
+.page-header h1 {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.03em;
+}
+
+.page-header p {
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  margin-top: 0.25rem;
+}
+
+.divider {
+  border-color: var(--border);
+  margin: 1.2rem 0;
+}
+
+.section-label {
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  margin-bottom: 0.85rem;
+}
+
+/* ================================================================
+   CARDS DE PRODUCTOS
+================================================================ */
+.producto {
+  animation: fadeInUp 0.4s ease both;
+}
+
+/* Animación escalonada: cada tarjeta aparece ligeramente después */
+.producto:nth-child(1)  { animation-delay: 0.04s; }
+.producto:nth-child(2)  { animation-delay: 0.08s; }
+.producto:nth-child(3)  { animation-delay: 0.12s; }
+.producto:nth-child(4)  { animation-delay: 0.16s; }
+.producto:nth-child(5)  { animation-delay: 0.20s; }
+.producto:nth-child(6)  { animation-delay: 0.24s; }
+.producto:nth-child(7)  { animation-delay: 0.28s; }
+.producto:nth-child(8)  { animation-delay: 0.32s; }
+.producto:nth-child(9)  { animation-delay: 0.36s; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* Tarjeta — !important necesario para sobreescribir Bootstrap */
+.card {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  height: 100%;
+  transition: transform var(--transition), box-shadow var(--transition),
+              background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(79, 124, 255, 0.3) !important;
+}
+
+.card-img-top {
+  height: 210px;
+  object-fit: contain;
+  background-color: var(--bg-secondary);
+  padding: 1.2rem;
+  transition: background-color 0.35s ease;
+}
+
+.card-body {
+  background-color: var(--bg-card);
+  padding: 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  transition: background-color 0.35s ease;
+}
+
+/* Nombre del producto */
+.card-title {
+  color: var(--text-main) !important;
+  font-size: 0.96rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Precio — clase usada en el HTML en lugar de .card-text */
+.card-price {
+  color: var(--accent) !important;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* ================================================================
+   BOTONES
+================================================================ */
+
+/* Agregar al carrito */
+.btn-agregar {
+  background-color: var(--success);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.87rem;
+  font-weight: 600;
+  margin-top: auto;
+  padding: 0.52rem 1rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  transition: background-color var(--transition), transform var(--transition),
+              box-shadow var(--transition);
+}
+
+.btn-agregar:hover {
+  background-color: var(--success-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(62, 207, 142, 0.35);
+  color: #fff;
+}
+
+.btn-agregar:active { transform: translateY(0); }
+
+/* Estado temporal "agregado" — se activa desde JS por 1.2s */
+.btn-agregar.agregado {
+  background-color: var(--accent);
+  pointer-events: none;
+}
+
+/* Eliminar producto */
+.btn-peligro {
+  background-color: var(--danger);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.37rem 0.78rem;
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.btn-peligro:hover {
+  background-color: var(--danger-hover);
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+/* Botón secundario (volver, navegar) */
+.btn-secundario {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 0.87rem;
+  font-weight: 500;
+  padding: 0.47rem 1.1rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.btn-secundario:hover {
+  background-color: var(--border);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+/* Controles +/- de cantidad */
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.qty-btn {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background-color var(--transition), border-color var(--transition),
+              transform var(--transition);
+}
+
+.qty-btn:hover {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: scale(1.12);
+}
+
+.qty-value {
+  color: var(--text-main);
+  font-size: 0.92rem;
+  font-weight: 600;
+  min-width: 22px;
+  text-align: center;
+}
+
+/* ================================================================
+   TOAST — Notificación al agregar producto
+   Posición: esquina inferior derecha
+   Para mover: cambia bottom / right
+================================================================ */
+.toast-container {
+  position: fixed;
+  bottom: 1.4rem;
+  right: 1.4rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;  /* no interfiere con clicks del usuario */
+}
+
+.toast-item {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--success);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  color: var(--text-main);
+  font-size: 0.86rem;
+  font-weight: 500;
+  padding: 0.72rem 1.1rem;
+  max-width: 275px;
+  animation: toastIn 0.27s ease, toastOut 0.27s ease 2.2s forwards;
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(110%); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0);    }
+  to   { opacity: 0; transform: translateX(110%); }
+}
+
+/* ================================================================
+   CARRITO (cart.html)
+================================================================ */
+.cart-table-wrapper {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cart-table th {
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  padding: 0.7rem 1rem;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.35s ease;
+}
+
+.cart-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-main);
+  vertical-align: middle;
+  transition: background-color 0.35s ease;
+}
+
+.cart-table tr:last-child td { border-bottom: none; }
+
+.cart-table tbody tr {
+  transition: background-color var(--transition);
+}
+
+.cart-table tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+.cart-item-name  { font-weight: 600; color: var(--text-main); }
+.cart-item-price { color: var(--accent); font-weight: 600; }
+.cart-item-sub   { color: var(--text-secondary); font-weight: 500; }
+
+/* Estado vacío */
+.cart-empty {
+  padding: 2.8rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.cart-empty .icon { font-size: 2.6rem; margin-bottom: 0.75rem; opacity: 0.35; display: block; }
+
+/* Panel de resumen del pedido */
+.cart-summary {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.4rem;
+  box-shadow: var(--shadow);
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+.cart-summary .label {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.cart-summary .total-amount {
+  color: var(--accent);
+  font-size: 1.85rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.btn-pagar {
+  background-color: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.65rem 1.2rem;
+  width: 100%;
+  margin-top: 0.5rem;
+  transition: background-color var(--transition), transform var(--transition),
+              box-shadow var(--transition);
+}
+
+.btn-pagar:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+
+/* ================================================================
+   PANEL OCULTO DE CONFIGURACIÓN (Dev Panel)
+   Atajos: Ctrl + Shift + D (cualquier página)
+   No visible para usuarios — solo devs que conozcan el atajo.
+================================================================ */
+#devPanel {
+  position: fixed;
+  top: 0;
+  right: -420px;        /* Oculto por defecto fuera de pantalla */
+  width: 400px;
+  max-width: 95vw;
+  height: 100vh;
+  background-color: var(--bg-secondary);
+  border-left: 1px solid var(--border);
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.5);
+  z-index: 99999;
+  padding: 1.4rem;
+  overflow-y: auto;
+  transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Clase que abre el panel deslizándolo hacia la pantalla */
+#devPanel.open { right: 0; }
+
+#devPanel h2 {
+  color: var(--text-main);
+  font-size: 0.97rem;
+  font-weight: 700;
+  margin-bottom: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+#devPanel .close-panel {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 1.15rem;
+  padding: 0;
+  line-height: 1;
+  transition: color var(--transition);
+}
+
+#devPanel .close-panel:hover { color: var(--danger); }
+
+.dev-section {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+.dev-section h3 {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.7rem;
+}
+
+/* Filas de color picker */
+.color-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.55rem;
+  gap: 0.5rem;
+}
+
+.color-row label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  flex: 1;
+  font-family: 'Courier New', monospace;
+}
+
+.color-row input[type="color"] {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  height: 26px;
+  width: 40px;
+  padding: 2px;
+  background: none;
+}
+
+/* Log JSON del carrito */
+#devCartLog {
+  background-color: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: #4ade80;
+  font-family: 'Courier New', monospace;
+  font-size: 0.73rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.7rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+/* Overlay semitransparente detrás del panel */
+#devOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  z-index: 99998;
+}
+
+#devOverlay.visible { display: block; }
+
+/* ================================================================
+   FOOTER
+================================================================ */
+footer {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.81rem;
+  padding: 1.3rem;
+  text-align: center;
+  transition: background-color 0.35s ease, border-color 0.35s ease;
+}
+
+/* ================================================================
+   RESPONSIVE
+================================================================ */
+@media (max-width: 768px) {
+  .search-input { width: 140px; }
+  .page-header h1 { font-size: 1.4rem; }
+  .card-img-top { height: 175px; }
+  .cart-summary .total-amount { font-size: 1.5rem; }
+}
+
+@media (max-width: 576px) {
+  .cart-table th:nth-child(2),
+  .cart-table td:nth-child(2) { display: none; }
+}

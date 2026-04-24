@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    (function() {
+      var t = localStorage.getItem("tienda_tema");
+      if (t === "light") document.documentElement.setAttribute("data-theme", "light");
+    })();
+  </script>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Tienda Demo — Carrito de compras con estilo retro Windows 98" />
+  <title>Tienda Demo — Carrito</title>
+
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+    crossorigin="anonymous"
+  />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAVBAR — Barra de menú estilo Windows 98
+       ============================================================ -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+
+      <a class="navbar-brand" href="index.html">Tienda<span>Demo</span></a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarMenu"
+        aria-controls="navbarMenu"
+        aria-expanded="false"
+        aria-label="Abrir menú"
+      >
+        <span style="color:var(--text-main);font-size:1rem;">☰</span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Productos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="cart.html">
+              Carrito <span id="contador">0</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
+          <button id="themeToggle" class="theme-toggle">☀️ Claro</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       CONTENIDO PRINCIPAL
+       ============================================================ -->
+  <main class="container">
+
+    <div class="page-header">
+      <h1>Carrito de Compras</h1>
+      <p>Revisa y ajusta los productos antes de continuar</p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="row g-4 align-items-start">
+
+      <!-- ── Tabla de productos ── -->
+      <div class="col-12 col-lg-8">
+
+        <p class="section-label">Productos en tu carrito</p>
+
+        <div class="cart-table-wrapper">
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="bodyCarrito">
+              <tr>
+                <td colspan="5">
+                  <div class="cart-empty">
+                    <span class="icon">🛒</span>
+                    <p>Tu carrito está vacío</p>
+                    <small>Agrega productos desde la tienda</small>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="d-flex gap-2 mt-3 flex-wrap">
+          <a href="index.html" class="btn-secundario">← Seguir comprando</a>
+          <button id="btnLimpiarCarrito" class="btn-peligro">🗑 Vaciar carrito</button>
+        </div>
+
+      </div>
+
+
+      <!-- ── Panel de resumen ── -->
+      <div class="col-12 col-lg-4">
+
+        <p class="section-label">Resumen del pedido</p>
+
+        <div class="cart-summary">
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="label">Ítems</span>
+            <span id="contadorItems" style="color:var(--text-secondary);font-size:12px;">0</span>
+          </div>
+
+          <hr class="divider" style="margin:6px 0;" />
+
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="label">Total</span>
+            <span id="totalMonto" class="total-amount">$0</span>
+          </div>
+
+          <hr class="divider" style="margin:6px 0;" />
+
+          <button
+            class="btn-pagar"
+            onclick="alert('Función de pago no implementada en esta demo')"
+          >
+            Ir a pagar →
+          </button>
+
+          <p style="color:var(--text-muted);font-size:10px;margin-top:6px;text-align:center;">
+            Los precios incluyen IVA
+          </p>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+  <footer>
+    <p>&copy; 2026 Tienda Demo. Todos los derechos reservados.</p>
+  </footer>
+
+
+  <!-- Bootstrap JS -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-CDOy6cOE+C24W/C4/t8w+/EsbDL4xwLn62Y3P/K1M+8e+F0H7Pj/Av+sPaTRZg0yW"
+    crossorigin="anonymous"
+  ></script>
+
+  <!-- jQuery 3 — requerido por Lección 6 -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+  <script src="js/script.js"></script>
+
+</body>
+</html>
